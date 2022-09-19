@@ -15,23 +15,41 @@ use App\Http\Controllers\OrderController;
 */
 
 // Home
-Route::get('/', function () {
-    return view('home');
-});
+Route::get(
+    '/',
+    function () {
+        return view('home');
+    }
+);
 
 // List all orders
-Route::get('/orders', [OrderController::class, 'index']);
+Route::get(
+    '/orders',
+    [OrderController::class, 'index']
+);
 
 // Show a form to create a new order
-Route::get('/orders/new', function () {
-    return view('orders.new');
-});
+Route::get(
+    '/orders/new',
+    function () {
+        return view('orders.new');
+    }
+);
 
-// Show order details before to pay
-Route::post('/orders/checkout', [OrderController::class, 'checkout']);
+// Save the order and show all details before to pay
+Route::post(
+    '/orders/checkout',
+    [OrderController::class, 'store']
+);
 
-// Save to database
-Route::post('/orders/create', [OrderController::class, 'store']);
+// Response page for payments
+Route::get(
+    '/orders/pay',
+    [OrderController::class, 'paymentStatus']
+);
 
 // Show order details
-Route::get('/traking/[id]', [OrderController::class, 'show']);
+Route::get(
+    '/orders/traking/[id]',
+    [OrderController::class, 'show']
+);
