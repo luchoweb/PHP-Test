@@ -30,12 +30,12 @@
                   </a>
                 </li>
                 <li>
-                  <a href="/orders" class="text-light">
+                  <a href="/orders/new" class="text-light">
                     New order
                   </a>
                 </li>
                 <li>
-                  <a href="/orders" class="text-light">
+                  <a href="/orders/tracking" class="text-light">
                     Tracking order
                   </a>
                 </li>

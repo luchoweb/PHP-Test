@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TrackingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,8 +49,16 @@ Route::get(
     [OrderController::class, 'paymentStatus']
 );
 
-// Show order details
+// Tracking an order
 Route::get(
-    '/orders/traking/[id]',
-    [OrderController::class, 'show']
+    '/orders/tracking',
+    function () {
+        return view('orders.tracking');
+    }
+);
+
+// Show order details
+Route::post(
+    '/orders/tracking',
+    [TrackingController::class, 'show']
 );
