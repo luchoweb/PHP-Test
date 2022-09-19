@@ -15,9 +15,23 @@ Third, move to the project folder ```cd PHP-Test``` and install Laravel:
 composer.phar install
 ```
 
+Fourth, rename or copy ```.env.example``` to ```.env``` and payments variables.
+
+```txt
+PAYMENT_URL=
+PAYMENT_LOGIN=
+PAYMENT_SECRET_KEY=
+```
+
+---
+
+#### Set up database
+
 ---
 
 #### Migration
+
+Run migration ```php artisan migrate```
 
 ---
 
