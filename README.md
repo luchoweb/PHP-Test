@@ -1,21 +1,26 @@
 ## PHP Test
 
-### Installation
+### Prerequisites
 
-First, [install PHP](https://www.php.net/manual/en/install.php) on your OS.
+- Please [install PHP](https://www.php.net/manual/en/install.php) on your OS.
+- Please install [XAMP](https://www.apachefriends.org/es/download.html) or [MAMP](https://www.mamp.info/en/downloads/) to manage the database service and use PHPMyAdmin.
+
+---
+
+### Installation
 
 Second, clone the repository:
 ```cmd
 git clone https://github.com/luchoweb/PHP-Test
 ```
 
-Third, move to the project folder ```cd PHP-Test``` and install Laravel:
+Third, move to root folder of the project ```cd PHP-Test``` and install Laravel:
 
 ```cmd
 composer.phar install
 ```
 
-Fourth, rename or copy ```.env.example``` to ```.env``` and payments variables.
+Fourth, rename or copy ```.env.example``` to ```.env``` and add the payments variables at the end of the file.
 
 ```txt
 PAYMENT_URL=
@@ -31,18 +36,21 @@ PAYMENT_SECRET_KEY=
 
 #### Migration
 
-Run migration ```php artisan migrate```
+Make sure you're in the root folder of the project and run ```php artisan migrate```
+
+---
+
+#### Install node_modules
+
+Make sure you're in the root folder of the project and run ```npm install```
 
 ---
 
 #### Ready?
 
-Finally, run local server (--port flag is optional):
-```cmd
-php artisan serve --port=8080
-```
+Finally, run ```php artisan serve``` and in another console tab run ```npm run dev```
 
-Visit http://localhost:8080 or http://127.0.0.1:8080
+Visit http://localhost:8000
 
 ---
 

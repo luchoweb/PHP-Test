@@ -1,6 +1,45 @@
+:root {
+  --color-primary: #ff6c0c;
+  --color-secondary: #58595b;
+  --fw-normal: 400;
+  --fw-bold: 600;
+}
+
 html,
 body {
   font-family: Nunito, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: var(--fw-normal);
   margin: 0;
   padding: 0;
+}
+
+h1, h2, h3, h4, h5, b, strong {
+  font-weight: var(--fw-bold);
+} 
+
+a, a:visited, a:focus {
+  text-decoration: none;
+}
+
+header {
+  background-color: var(--color-primary);
+}
+header .menu a {
+  font-size: 1.2rem;
+  transition: all 200ms ease-in-out;
+}
+header .menu a:hover {
+  opacity: .8;
+}
+
+main {
+  min-height: 400px;
+}
+
+footer {
+  border-top: 1px solid var(--bs-gray-300);
+}
+footer .heart {
+  color: var(--bs-danger);
 }
