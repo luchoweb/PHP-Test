@@ -39,6 +39,18 @@ class OrderController extends Controller
         return view('orders.new', ['products' => $products]);
     }
 
+    public function checkout(Request $request)
+    {
+        $order_data = $request->order_id ? 
+            [
+                'order_id' => $request->order_id,
+                'order' => $this->orders->getOrderById($request->order_id)
+            ] 
+            : $this->store($request);
+
+        return view('orders.checkout', $order_data);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -55,6 +67,7 @@ class OrderController extends Controller
             'customer_mobile' => request('customer_mobile'),
             'status' => 'CREATED',
             'payment_status' => 'NONE',
+            'shipping_status' => 'WAIT_PAYMENT',
             'total' => request('total'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
@@ -64,11 +77,12 @@ class OrderController extends Controller
         $order = new Order($data);
         $order->save();
 
-        return view('orders.checkout', [
+        $orderSaved = [
             'order_id' => $order['id'],
-            'order' => $data,
-            'product' => $product
-        ]);
+            'order' => $order
+        ];
+
+        return $orderSaved;
     }
 
     /**

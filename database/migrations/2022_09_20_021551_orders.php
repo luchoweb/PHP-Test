@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('customer_mobile', 40);
             $table->string('status', 20);
             $table->string('payment_status', 40);
+            $table->string('shipping_status', 40);
             $table->string('total');
             $table->timestamps();
 

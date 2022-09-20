@@ -38,7 +38,7 @@ Route::get(
 // Save the order and show all details before to pay
 Route::post(
     '/orders/checkout',
-    [OrderController::class, 'store']
+    [OrderController::class, 'checkout']
 );
 
 // Response page for payments
