@@ -32,9 +32,7 @@ Route::get(
 // Show a form to create a new order
 Route::get(
     '/orders/new',
-    function () {
-        return view('orders.new');
-    }
+    [OrderController::class, 'new']
 );
 
 // Save the order and show all details before to pay

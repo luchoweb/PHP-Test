@@ -38,6 +38,8 @@ PAYMENT_SECRET_KEY=
 
 Make sure you're in the root folder of the project and run ```php artisan migrate```
 
+After run ```php artisan db:seed``` for seeding products table.
+
 ---
 
 #### Install node_modules

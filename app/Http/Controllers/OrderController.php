@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
     protected $orders;
+    protected $products;
 
-    public function __construct(Order $orders)
+    public function __construct(Order $orders, Product $products)
     {
         $this->orders = $orders;
+        $this->products = $products;
     }
 
     /**
@@ -23,6 +26,17 @@ class OrderController extends Controller
     {
         $orders = $this->orders->getOrders();
         return view('orders.list', ['orders' => $orders]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function new()
+    {
+        $products = $this->products->getProducts();
+        return view('orders.new', ['products' => $products]);
     }
 
     /**
