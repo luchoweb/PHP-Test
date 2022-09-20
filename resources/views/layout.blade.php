@@ -47,7 +47,7 @@
 
       @yield('content')
 
-      <footer class="pt-3 pb-3 text-center">
+      <footer class="pt-4 pb-3 text-center">
         <p class="m-0 text-dark">
           <small>
             Made with <span class="heart">&#10084;</span> by Lucho Web

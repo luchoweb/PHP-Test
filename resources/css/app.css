@@ -7,11 +7,10 @@
 
 html,
 body {
+  color: var(--bs-dark);
   font-family: Nunito, Arial, sans-serif;
   font-size: 16px;
   font-weight: var(--fw-normal);
-  margin: 0;
-  padding: 0;
 }
 
 h1, h2, h3, h4, h5, b, strong {
@@ -35,6 +34,20 @@ header .menu a:hover {
 
 main {
   min-height: 400px;
+}
+
+main.orders .order-details {
+  border: 1px solid var(--bs-gray-300);
+  border-radius: 1rem;
+}
+main.orders .order-details .title {
+  border-radius: 1rem 1rem 0 0;
+}
+main.orders .order-details .title span {
+  font-size: 1rem;
+}
+main.orders .order-details .details li {
+  border-top: 1px solid var(--bs-gray-300);
 }
 
 footer {

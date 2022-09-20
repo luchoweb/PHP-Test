@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('product_name', 255)->default(['Macbook Pro 2022']);
-            $table->integer('product_price')->default([2990]);
+            $table->integer('product_price');
+            $table->string('product_name', 255);
             $table->timestamps();
         });
     }

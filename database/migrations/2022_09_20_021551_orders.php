@@ -21,6 +21,11 @@ return new class extends Migration
             $table->string('status', 20);
             $table->string('payment_status', 40);
             $table->timestamps();
+
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products');
         });
     }
 

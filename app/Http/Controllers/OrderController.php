@@ -47,10 +47,29 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //$order = new Order($request->all());
+        //$product = $this->products->getProductById($request->product_id);
+
+        $data = [
+            'customer_name' => request('customer_name'),
+            'customer_email' => request('customer_email'),
+            'customer_mobile' => request('customer_mobile'),
+            'status' => 'CREATED',
+            'payment_status' => 'NONE',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'product_id' => request('product_id')
+        ];
+
+        //$order = new Order($data);
         //$order->save();
 
-        return view('orders.checkout', $request->all());
+        $product = $this->products->getProductById(request('product_id'));
+
+        return view('orders.checkout', [
+            'order_id' => 1, //$order['id'],
+            'order' => $data,
+            'product' => $product
+        ]);
     }
 
     /**
