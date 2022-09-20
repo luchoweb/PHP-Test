@@ -27,7 +27,7 @@
           <div class="col-12 col-md-6 mb-4">
             <label for="product">Select product</label>
             {{-- Se pidió no pensar en funcionalidad sino más en integracion y buenas prácticas, por ello solo dejé 1 producto --}}
-            <select name="product_id" id="product" class="form-select" required disabled>
+            <select name="product_id" id="product" class="form-select" required>
               @foreach ($products as $product)
                   <option value="{{ $product->id }}">
                     {{ $product->product_name }}
@@ -44,6 +44,8 @@
         <h5 class="m-0 mb-4">
           Total: {{ formatCurrency($products[0]->product_price, 'COP') }}
         </h5>
+
+        <input type="hidden" name="total" value="{{$product['product_price']}}">
       
         <button class="btn btn-dark">Go checkout</button>
       </form>

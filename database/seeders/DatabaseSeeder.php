@@ -16,7 +16,9 @@ class DatabaseSeeder extends Seeder
     {
         DB::table('products')->insert([
             'product_name' => 'MacBook Pro 2022',
-            'product_price' => 5999000
+            'product_price' => 5999000,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ]);
     }
 }

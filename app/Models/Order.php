@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
     use HasFactory;
 
     protected $table = "orders";
-    protected $fillable = ['customer_name', 'customer_email', 'customer_mobile', 'status', 'payment_status', 'product_id'];
+    protected $fillable = ['customer_name', 'customer_email', 'customer_mobile', 'status', 'product_id', 'payment_status', 'total'];
     protected $hidden = ['id'];
 
     public function getOrders()
@@ -27,10 +27,10 @@ class Order extends Model
     /**
      * Get the product that owns the Order
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function product(): BelongsToMany
+    public function product(): HasOne
     {
-        return $this->belongsToMany(Product::class, 'product_id');
+        return $this->hasOne(Product::class, 'id', 'product_id');
     }
 }
