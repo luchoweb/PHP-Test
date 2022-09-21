@@ -17,44 +17,37 @@ class OrderController extends Controller
         $this->products = $products;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Route[GET]: /orders
     public function index()
     {
+        // Get all orders and list them
         $orders = $this->orders->getOrders();
         return view('orders.list', ['orders' => $orders]);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Route[GET]: /orders/new
     public function new()
     {
+        // Get all products to list in the new order form
         $products = $this->products->getProducts();
         return view('orders.new', ['products' => $products]);
     }
 
+    // Route[POST]: /orders/checkout
     public function checkout(Request $request)
     {
+        // Save the order and show all details and "Pay now" button
         $order_data = $this->store($request);
         return view('orders.checkout', $order_data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // Save an order in the database
     public function store(Request $request)
     {
+        // Get the product in the order
         $product = $this->products->getProductById($request->product_id);
 
+        // Create the order schema
         $data = [
             'customer_document' => request('customer_document'),
             'customer_documentType' => request('customer_documentType'),
@@ -71,6 +64,7 @@ class OrderController extends Controller
             'product_id' => $request->product_id
         ];
 
+        // Save the order
         $order = new Order($data);
         $order->save();
 
@@ -79,6 +73,7 @@ class OrderController extends Controller
             'order' => $order
         ];
 
+        // Return the new order info
         return $orderSaved;
     }
 }

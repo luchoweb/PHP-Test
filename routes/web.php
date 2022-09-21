@@ -17,59 +17,29 @@ use App\Http\Controllers\PaymentController;
 */
 
 // Home
-Route::get(
-    '/',
-    function () {
-        return view('home');
-    }
-);
+Route::get('/', function () {
+    return view('home');
+});
 
 // List all orders
-Route::get(
-    '/orders',
-    [OrderController::class, 'index']
-);
+Route::get('/orders', [OrderController::class, 'index']);
 
 // Show a form to create a new order
-Route::get(
-    '/orders/new',
-    [OrderController::class, 'new']
-);
-
-// Tracking an order
-Route::get(
-    '/orders/tracking',
-    function () {
-        return view('orders.tracking');
-    }
-);
-
-// Webcheckout return confirm route
-Route::get(
-    '/orders/pay/confirm',
-    [PaymentController::class, 'status']
-);
-
-// Webcheckout return cancel route
-Route::get(
-    '/orders/pay/cancel',
-    [PaymentController::class, 'status']
-);
-
-// Show order details
-Route::post(
-    '/orders/tracking',
-    [TrackingController::class, 'show']
-);
+Route::get('/orders/new', [OrderController::class, 'new']);
 
 // Save the order and show all details before to pay
-Route::post(
-    '/orders/checkout',
-    [OrderController::class, 'checkout']
-);
+Route::post('/orders/checkout', [OrderController::class, 'checkout']);
 
-// Get order info and redirect to webcheckout
-Route::post(
-    '/orders/pay',
-    [PaymentController::class, 'pay']
-);
+// Tracking an order
+Route::get('/orders/tracking', function () {
+    return view('orders.tracking');
+});
+
+// Show order details
+Route::post('/orders/tracking', [TrackingController::class, 'show']);
+
+// Show order details and redirect to webcheckout
+Route::post('/orders/pay', [PaymentController::class, 'pay']);
+
+// Show order status after paying it on webcheckout
+Route::get('/orders/pay/status', [PaymentController::class, 'status']);

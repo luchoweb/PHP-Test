@@ -9,12 +9,7 @@ use DateTime;
 
 class PaymentController extends Controller
 {
-    public function index()
-    {
-        return view('payments.pay');
-    }
-
-    // Create auth
+    // Create auth for new sessions
     private function createAuth()
     {
         $nonce = rand();
@@ -27,12 +22,16 @@ class PaymentController extends Controller
         ];
     }
 
-    // Create session and load the web checkout
+    // Create a new session
     private function createSession($order)
     {
+        // Get the auth info
         $auth = $this->createAuth();
+
+        // Session expiration date
         $expiration = strtotime(date('Y-m-d H:i:s')) + 600;
 
+        // Session body
         $body = [
             'locale' => 'es_CO',
             'auth' => [
@@ -58,21 +57,26 @@ class PaymentController extends Controller
                 ],
             ],
             'expiration' => date('Y-m-d H:i:s', $expiration),
-            'returnUrl' => env('APP_URL') . '/orders/pay/confirm',
-            'cancelUrl' => env('APP_URL') . '/orders/pay/cancel',
+            'returnUrl' => env('APP_URL') . '/orders/pay/status',
+            'cancelUrl' => env('APP_URL') . '/orders/pay/status',
             'ipAddress' => $_SERVER['REMOTE_ADDR'],
             'userAgent' => $_SERVER['HTTP_USER_AGENT']
         ];
 
+        // Send request for new session
         $response = Http::post(env('PAYMENT_BASE_URL').'/api/session', $body)->json();
 
+        // Return response
         return $response;
     }
 
+    // Get session info by requestId
     private function checkSession($request_id)
     {
+        // Get the auth info
         $auth = $this->createAuth();
 
+        // Request body
         $body = [
             'auth' => [
                 'login' => env('PAYMENT_LOGIN'),
@@ -82,23 +86,63 @@ class PaymentController extends Controller
             ]
         ];
 
+        // Request response
         $response = Http::post(env('PAYMENT_BASE_URL').'/api/session/'.$request_id, $body)->json();
 
+        // Return response
         return $response;
     }
 
-    // Save requestId in the order and redirect to webcheckout
+    // Update payments field
+    private function updatePaymentsField($fields)
+    {
+        $legacy_statuses = [
+            'APPROVED' => 'PAYED',
+            'REJECTED' => 'REJECTED'
+        ];
+
+        $legacy_status = in_array($fields['payment_status'], $legacy_statuses) ? $legacy_statuses[$fields['payment_status']] : 'CREATED';
+
+        // Update order payments fields
+        $order = Order::find($fields['order_id']);
+        $order->payment_status = $fields['payment_status'];
+        $order->status = $legacy_status;
+        $order->save();
+
+        // Return the order updated
+        return $order;
+    }
+
+    // Add the requestId to the order
+    private function addRequestId($request_id, $id)
+    {
+        // Find the right order
+        $order = Order::find($id);
+        // Update the field
+        $order->payment_requestId = $request_id;
+        // Save changes in the database
+        $order->save();
+
+        // Return payment_requestId
+        return $order['payment_requestId'];
+    }
+
+    /** 
+     * Route[POST]: /orders/pay
+     * Save requestId in the order (database) and redirect to webcheckout
+     * Or show a alert error in the view when the session wasn't created
+     */
     public function pay(Request $request)
     {
         // Create a new session
         $response = $this->createSession($request->all());
 
-        // Set up a view by default
+        // Set up a view by default (Error response)
         $view = view('payments.pay', ['response' => $response['status']]);
 
         // Check if the new session was created
         if ( $response['status']['status'] === 'OK' ) {
-            // add requestId to order in database
+            // Add requestId to order in database
             $add_request_id = $this->addRequestId($response['requestId'], $request->order_id);
 
             // Validate if requestId field was updated
@@ -115,6 +159,11 @@ class PaymentController extends Controller
         return $view;
     }
 
+    /**
+     * Routes[GET]: /orders/pay/confirm, /orders/pay/cancel
+     * Check a session with requestId === [COOKIE]->current_payment
+     * If session has not expired, we show all details
+     */
     public function status()
     {
         // Initial response, show an error message in the view
@@ -132,19 +181,29 @@ class PaymentController extends Controller
             // Check session
             $response = $this->checkSession($_COOKIE['current_payment']);
 
+            // Get order id from response
+            $order_id = $response['request']['payment']['reference'];
+
+            // Check if response is PENDING
+            $is_session_pending = $response['status']['status'] === 'PENDING';
+
             // Get status
-            $status = $response['status']['status'] === 'PENDING'  ? $response['status']['status'] : $response['payment'][0]['status']['status'];
+            $payment_status = 
+                $is_session_pending ? 
+                $response['status']['status'] : 
+                $response['payment'][0]['status']['status'];
 
             // Get payment values
             $payment_fields = [
-                'order_id' => $response['request']['payment']['reference'],
-                'payment_status' => $status
+                'order_id' => $order_id,
+                'payment_status' => $payment_status
             ];
 
-            // Update the order
+            // Update the order status
             $order = $this->updatePaymentsField($payment_fields);
         }
 
+        // What kind of console.log is this :P
         //print_r(json_encode($response));
 
         // Show the view
@@ -154,6 +213,10 @@ class PaymentController extends Controller
         ]);
     }
 
+    /**
+     * Route[API][POST]: /
+     * Recived a notification from webchecout when an order change from PENDING to another status
+     */
     public function pendingPayments(Request $request)
     {
         // Checking a valid request
@@ -188,34 +251,5 @@ class PaymentController extends Controller
                 // We could send a notification by mail here ;)
             }
         }
-    }
-
-    // Update payments field
-    private function updatePaymentsField($fields)
-    {
-        $legacy_statuses = [
-            'APPROVED' => 'PAYED',
-            'REJECTED' => 'REJECTED'
-        ];
-
-        $legacy_status = in_array($fields['payment_status'], $legacy_statuses) ? $legacy_statuses[$fields['payment_status']] : 'CREATED';
-
-        // Update order payments fields
-        $order = Order::find($fields['order_id']);
-        $order->payment_status = $fields['payment_status'];
-        $order->status = $legacy_status;
-        $order->save();
-
-        return $order;
-    }
-
-    // Add the requestId value to the order
-    private function addRequestId($request_id, $id)
-    {
-        $order = Order::find($id);
-        $order->payment_requestId = $request_id;
-        $order->save();
-
-        return $order['payment_requestId'];
     }
 }
