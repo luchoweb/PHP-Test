@@ -109,7 +109,7 @@ class PaymentController extends Controller
         return $view;
     }
 
-    public function status(Request $request)
+    public function status()
     {
         $response = [
             'status' => [
@@ -123,18 +123,34 @@ class PaymentController extends Controller
         if ( !empty($_COOKIE['current_payment']) ) {
             $response = $this->checkSession();
 
+            $status = $response['status']['status'] === 'PENDING'  ? $response['status']['status'] : $response['payment'][0]['status']['status'];
+
             $payment_fields = [
                 'order_id' => $response['request']['payment']['reference'],
-                'payment_status' => $response['payment'][0]['status']['status']
+                'payment_status' => $status
             ];
 
             $order = $this->updatePaymentsField($payment_fields);
         }
 
+        print_r(json_encode($response));
+
         return view('payments.status', [
             'response' => $response,
             'order' => $order
         ]);
+    }
+
+    public function asyncStatus(Request $request)
+    {
+        $status = $request['status']['status'] === 'PENDING'  ? $request['status']['status'] : $request['payment'][0]['status']['status'];
+
+        $payment_fields = [
+            'order_id' => $request['request']['payment']['reference'],
+            'payment_status' => $status
+        ];
+
+        $order = $this->updatePaymentsField($payment_fields);
     }
 
     // Update payments field
@@ -145,11 +161,11 @@ class PaymentController extends Controller
             'REJECTED' => 'REJECTED'
         ];
 
-        $legacy_status = $legacy_statuses[$response['payment_status']];
+        $legacy_status = in_array($response['payment_status'], $legacy_statuses) ? $legacy_statuses[$response['payment_status']] : 'CREATED';
 
         $order = Order::find($response['order_id']);
         $order->payment_status = $response['payment_status'];
-        $order->status = $legacy_status ? $legacy_status : 'CREATED';
+        $order->status = $legacy_status;
         $order->save();
 
         return $order;

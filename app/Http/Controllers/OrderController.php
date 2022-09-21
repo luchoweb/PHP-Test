@@ -90,7 +90,8 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = $this->orders->getOrderById($id);
-        return view('orders.tracking', ['order' => $order]);
+        print_r($id);
+        //$order = $this->orders->getOrderById($id);
+        return view('orders.tracking');
     }
 }

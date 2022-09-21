@@ -9,7 +9,7 @@
   <input type="hidden" name="customer_mobile" value="{{ $order['customer_mobile'] }}">
   <input type="hidden" name="order_total" value="{{ $order['total'] }}">
   <button class="btn btn-dark btn-lg">
-    @if ($order['payment_status'] === 'REJECTED')
+    @if ($order['payment_status'] === 'REJECTED' || $order['payment_status'] === 'PENDING')
       Retry payment
     @else
       Pay now  
