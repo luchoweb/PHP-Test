@@ -101,12 +101,12 @@ class PaymentController extends Controller
             'REJECTED' => 'REJECTED'
         ];
 
-        $legacy_status = in_array($fields['payment_status'], $legacy_statuses) ? $legacy_statuses[$fields['payment_status']] : 'CREATED';
+        $legacy_status = array_key_exists($fields['payment_status'], $legacy_statuses) ? $legacy_statuses[$fields['payment_status']] : 'CREATED';
 
         // Update order payments fields
         $order = Order::find($fields['order_id']);
-        $order->payment_status = $fields['payment_status'];
         $order->status = $legacy_status;
+        $order->payment_status = $fields['payment_status'];
         $order->save();
 
         // Return the order updated
@@ -188,10 +188,7 @@ class PaymentController extends Controller
             $is_session_pending = $response['status']['status'] === 'PENDING';
 
             // Get status
-            $payment_status = 
-                $is_session_pending ? 
-                $response['status']['status'] : 
-                $response['payment'][0]['status']['status'];
+            $payment_status =  $is_session_pending ? $response['status']['status'] :  $response['payment'][0]['status']['status'];
 
             // Get payment values
             $payment_fields = [
