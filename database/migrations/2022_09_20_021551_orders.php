@@ -15,7 +15,10 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('customer_document', 20);
+            $table->string('customer_documentType', 5);
             $table->string('customer_name', 80);
+            $table->string('customer_surname', 80);
             $table->string('customer_email', 120);
             $table->string('customer_mobile', 40);
             $table->string('status', 20);

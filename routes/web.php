@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,12 +42,6 @@ Route::post(
     [OrderController::class, 'checkout']
 );
 
-// Response page for payments
-Route::get(
-    '/orders/pay',
-    [OrderController::class, 'paymentStatus']
-);
-
 // Tracking an order
 Route::get(
     '/orders/tracking',
@@ -59,4 +54,20 @@ Route::get(
 Route::post(
     '/orders/tracking',
     [TrackingController::class, 'show']
+);
+
+// Response page payments
+Route::get(
+    '/orders/pay/confirm',
+    [PaymentController::class, 'confirm']
+);
+
+Route::get(
+    '/orders/pay/cancel',
+    [PaymentController::class, 'cancel']
+);
+
+Route::post(
+    '/orders/pay',
+    [PaymentController::class, 'pay']
 );

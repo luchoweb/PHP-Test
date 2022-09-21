@@ -9,23 +9,29 @@
 
 ### Installation
 
-Second, clone the repository:
+Clone the repository:
 ```cmd
 git clone https://github.com/luchoweb/PHP-Test
 ```
 
-Third, move to root folder of the project ```cd PHP-Test``` and install Laravel:
+Move to root folder of the project ```cd PHP-Test``` and install Laravel:
 
 ```cmd
 composer.phar install
 ```
 
-Fourth, rename or copy ```.env.example``` to ```.env``` and add the payments variables at the end of the file.
+After, run:
+
+```cmd
+composer.phar require guzzlehttp/guzzle
+```
+
+Rename or copy ```.env.example``` to ```.env``` and add the payments variables at the end of the file.
 
 ```txt
-PAYMENT_URL=
-PAYMENT_LOGIN=
-PAYMENT_SECRET_KEY=
+PAYMENT_BASE_URL = 
+PAYMENT_LOGIN = 
+PAYMENT_SECRET_KEY =
 ```
 
 ---

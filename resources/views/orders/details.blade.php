@@ -13,7 +13,7 @@
 
     <li class="p-3">
       <p class="m-0">
-        <strong>Customer name</strong>: {{ $order['customer_name'] }}
+        <strong>Customer name</strong>: {{ $order['customer_name'] }} {{ $order['customer_surname'] }}
       </p>
     </li>
 
@@ -37,7 +37,7 @@
 
     <li class="p-3">
       <p class="m-0">
-        <strong>Total</strong>: {{ formatCurrency($order->product['product_price'], 'COP') }}
+        <strong>Total</strong>: {{ formatCurrency($order['total'], 'COP') }}
       </p>
     </li>
 

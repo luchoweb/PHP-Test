@@ -41,13 +41,7 @@ class OrderController extends Controller
 
     public function checkout(Request $request)
     {
-        $order_data = $request->order_id ? 
-            [
-                'order_id' => $request->order_id,
-                'order' => $this->orders->getOrderById($request->order_id)
-            ] 
-            : $this->store($request);
-
+        $order_data = $this->store($request);
         return view('orders.checkout', $order_data);
     }
 
@@ -62,7 +56,10 @@ class OrderController extends Controller
         $product = $this->products->getProductById($request->product_id);
 
         $data = [
+            'customer_document' => request('customer_document'),
+            'customer_documentType' => request('customer_documentType'),
             'customer_name' => request('customer_name'),
+            'customer_surname' => request('customer_surname'),
             'customer_email' => request('customer_email'),
             'customer_mobile' => request('customer_mobile'),
             'status' => 'CREATED',
@@ -83,29 +80,6 @@ class OrderController extends Controller
         ];
 
         return $orderSaved;
-    }
-
-    /**
-     * Show payment result and update the payment status field.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function paymentStatus(Request $request)
-    {
-        $data = [
-            'customer_name' => request('customer_name'),
-            'customer_email' => request('customer_email'),
-            'customer_mobile' => request('customer_mobile'),
-            'status' => request('status'),
-            'payment_status' => NULL
-        ];
-
-        // Update both payment_status and status fields in database
-        // TODO
-
-        // Show view
-        return view('orders.pay', $data);
     }
 
     /**
