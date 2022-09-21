@@ -64,7 +64,7 @@ class OrderController extends Controller
             'customer_mobile' => request('customer_mobile'),
             'status' => 'CREATED',
             'payment_status' => 'NONE',
-            'shipping_status' => 'WAIT_PAYMENT',
+            'payment_requestId' => 0,
             'total' => request('total'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),

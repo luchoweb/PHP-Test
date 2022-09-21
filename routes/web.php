@@ -59,12 +59,12 @@ Route::post(
 // Response page payments
 Route::get(
     '/orders/pay/confirm',
-    [PaymentController::class, 'confirm']
+    [PaymentController::class, 'status']
 );
 
 Route::get(
     '/orders/pay/cancel',
-    [PaymentController::class, 'cancel']
+    [PaymentController::class, 'status']
 );
 
 Route::post(
