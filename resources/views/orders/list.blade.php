@@ -22,7 +22,7 @@
             @foreach ($orders as $order)
             <tr>
               <th scope="row">{{ $order->id }}</th>
-              <td>{{ $order->customer_name }}</td>
+              <td>{{ $order->customer_name .' '. $order->customer_surname }}</td>
               <td>{{ $order->product->product_name }}</td>
               <td>{{ formatCurrency($order->total, 'COP') }}</td>
               <td>{{ $order->status }}</td>

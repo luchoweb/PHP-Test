@@ -46,11 +46,5 @@
         <strong>Payment status</strong>: {{ $order['payment_status'] }}
       </p>
     </li>
-
-    <li class="p-3">
-      <p class="m-0">
-        <strong>Shipping status</strong>: {{ $order['shipping_status'] }}
-      </p>
-    </li>
   </ul>
 </div>

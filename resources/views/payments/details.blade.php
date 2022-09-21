@@ -12,7 +12,7 @@
 
     <li class="p-3">
       <p class="m-0">
-        <strong>Payment status</strong>: <strong>{{ $response['status']['status'] }}</strong>: <small>{{ $response['status']['message'] }}</small>
+        <strong>Payment status</strong>: <strong>{{ $response['status']['status'] }}</strong>: <small>{{ $response['payment'][0]['status']['message'] }}</small>
       </p>
     </li>
 
@@ -31,6 +31,25 @@
     <li class="p-3">
       <p class="m-0">
         <strong>Total</strong>: {{ formatCurrency($response['request']['payment']['amount']['total'], 'COP') }}
+      </p>
+    </li>
+
+    @if ($response['status']['status'] === 'APPROVED')
+      <li class="p-3">
+        <p class="m-0">
+          <strong>Payment method</strong>: {{ $response['payment'][0]['paymentMethodName'] }}
+        </p>
+      </li>
+      <li class="p-3">
+        <p class="m-0">
+          <strong>Bank</strong>: {{ $response['payment'][0]['issuerName'] }}
+        </p>
+      </li>
+    @endif
+
+    <li class="p-3">
+      <p class="m-0">
+        <strong>IP</strong>: {{ $response['request']['ipAddress'] }}
       </p>
     </li>
   </ul>

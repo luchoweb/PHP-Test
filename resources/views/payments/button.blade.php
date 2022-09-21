@@ -9,7 +9,11 @@
   <input type="hidden" name="customer_mobile" value="{{ $order['customer_mobile'] }}">
   <input type="hidden" name="order_total" value="{{ $order['total'] }}">
   <button class="btn btn-dark btn-lg">
-    Pay now
+    @if ($order['payment_status'] === 'REJECTED')
+      Retry payment
+    @else
+      Pay now  
+    @endif
   </button>
 
   <p class="m-0 mt-3">

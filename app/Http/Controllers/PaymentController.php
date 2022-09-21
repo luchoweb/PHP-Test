@@ -61,8 +61,7 @@ class PaymentController extends Controller
             'returnUrl' => env('APP_URL') . '/orders/pay/confirm',
             'cancelUrl' => env('APP_URL') . '/orders/pay/cancel',
             'ipAddress' => $_SERVER['REMOTE_ADDR'],
-            'userAgent' => $_SERVER['HTTP_USER_AGENT'],
-
+            'userAgent' => $_SERVER['HTTP_USER_AGENT']
         ];
 
         $response = Http::post(env('PAYMENT_BASE_URL').'/api/session', $body)->json();
@@ -126,13 +125,11 @@ class PaymentController extends Controller
 
             $payment_fields = [
                 'order_id' => $response['request']['payment']['reference'],
-                'payment_status' => $response['status']['status']
+                'payment_status' => $response['payment'][0]['status']['status']
             ];
 
             $order = $this->updatePaymentsField($payment_fields);
         }
-
-        //print_r($order);
 
         return view('payments.status', [
             'response' => $response,
