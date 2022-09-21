@@ -11,7 +11,7 @@ class Order extends Model
     use HasFactory;
 
     protected $table = "orders";
-    protected $fillable = ['customer_name', 'customer_email', 'customer_mobile', 'status', 'product_id', 'payment_status', 'shipping_status', 'total'];
+    protected $fillable = ['customer_name', 'customer_surname', 'customer_email', 'customer_mobile', 'status', 'product_id', 'payment_status', 'customer_document', 'customer_documentType', 'total', 'payment_requestId'];
     protected $hidden = ['id'];
 
     public function getOrders()

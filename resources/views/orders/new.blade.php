@@ -10,8 +10,25 @@
 
         <div class="row mb-2 align-items-center justify-content-between">
           <div class="col-12 col-md-6 mb-4">
-            <label for="name">Full name</label>
-            <input type="text" id="name" placeholder="Full name" name="customer_name" class="form-control" required>
+            <label for="document_type">Document Type</label>
+            <select name="customer_documentType" id="document_type" class="form-select" required>
+              <option value="CC" selected>CC</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-6 mb-4">
+            <label for="document">Document</label>
+            <input type="text" pattern="[1-9]{1,}" id="document" placeholder="Document" name="customer_document" class="form-control" required>
+          </div>
+          
+          <div class="col-12 col-md-6 mb-4">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Name" name="customer_name" class="form-control" required>
+          </div>
+
+          <div class="col-12 col-md-6 mb-4">
+            <label for="surname">Surname</label>
+            <input type="text" id="surname" placeholder="Name" name="customer_surname" class="form-control" required>
           </div>
   
           <div class="col-12 col-md-6 mb-4">

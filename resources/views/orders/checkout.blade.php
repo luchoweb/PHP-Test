@@ -11,11 +11,7 @@
           'order' => $order
         ])
 
-        <form action="" class="mt-4 text-center">
-          <button class="btn btn-dark btn-lg">
-            Pay now
-          </button>
-        </form>
+        @include('payments.button', ['order' => $order])
       @else
           <div class="alert alert-danger mt-4">
             <p class="m-0">

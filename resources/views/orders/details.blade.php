@@ -7,25 +7,31 @@
   <ul class="details list-unstyled m-0 p-0">
     <li class="p-3">
       <p class="m-0">
-        <strong>ID de seguimiento</strong>: {{ $order_id }}
+        <strong>Order ID</strong>: {{ $order_id }}
       </p>
     </li>
 
     <li class="p-3">
       <p class="m-0">
-        <strong>Customer name</strong>: {{ $order['customer_name'] }}
+        <strong>Document</strong>: {{ $order['customer_documentType'] }}  {{ $order['customer_document'] }}
       </p>
     </li>
 
     <li class="p-3">
       <p class="m-0">
-        <strong>Customer email</strong>: {{ $order['customer_email'] }}
+        <strong>Full name</strong>: {{ $order['customer_name'] }} {{ $order['customer_surname'] }}
       </p>
     </li>
 
     <li class="p-3">
       <p class="m-0">
-        <strong>Customer mobile</strong>: {{ $order['customer_mobile'] }}
+        <strong>Email</strong>: {{ $order['customer_email'] }}
+      </p>
+    </li>
+
+    <li class="p-3">
+      <p class="m-0">
+        <strong>Mobile</strong>: {{ $order['customer_mobile'] }}
       </p>
     </li>
 
@@ -37,19 +43,13 @@
 
     <li class="p-3">
       <p class="m-0">
-        <strong>Total</strong>: {{ formatCurrency($order->product['product_price'], 'COP') }}
+        <strong>Total</strong>: {{ formatCurrency($order['total'], 'COP') }}
       </p>
     </li>
 
     <li class="p-3">
       <p class="m-0">
         <strong>Payment status</strong>: {{ $order['payment_status'] }}
-      </p>
-    </li>
-
-    <li class="p-3">
-      <p class="m-0">
-        <strong>Shipping status</strong>: {{ $order['shipping_status'] }}
       </p>
     </li>
   </ul>

@@ -31,17 +31,7 @@
           ])
 
           @if ($order['payment_status'] !== 'APPROVED')
-            <form action="/orders/checkout" class="mt-4 text-center" method="POST">
-              @csrf
-              <input type="hidden" name="order_id" value="{{ $order['id'] }}">
-              <button class="btn btn-dark btn-lg">
-                Pay now
-              </button>
-
-              <p class="m-0 mt-3">
-                <small>Secure by PlaceToPay</small>
-              </p>
-            </form>
+            @include('payments.button', ['order' => $order])
           @endif
         @else
             <div class="alert alert-warning mt-5">
