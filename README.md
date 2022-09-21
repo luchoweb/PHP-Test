@@ -65,15 +65,19 @@ Make sure you're in the root folder of the project and run ```npm install```
 
 Open XAMP o MAMP and start the mysql service, optional start the Apache or Nginx service.
 
-Then, run ```php artisan serve``` and in another console tab run ```npm run dev```
+Then, run ```php artisan serve --port=80``` and in another console tab run ```npm run dev```
 
-Visit http://localhost:8000
+**Important***: PlaceToPay doesn't allow a ```returnUrl``` or ```cancelUrl``` with port, for that reason we need start the local server on port **80**.
+
+**Note**: You may need root permissions to run the local server on port 80, for macOS and Linux it would be just using ```sudo``` at the beginning of the command and typing the root password.
+
+Visit: http://localhost
 
 ---
 
 #### Testing
 
-Coming soon
+Coming soon...
 
 ---
 
