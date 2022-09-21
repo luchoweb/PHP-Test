@@ -7,25 +7,15 @@ use App\Models\Order;
 
 class TrackingController extends Controller
 {
-    protected $orders;
-
-    public function __construct(Order $orders)
-    {
-        $this->orders = $orders;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // Tracking an order
     public function show(Request $request)
     {
-        $order_id = $request->order_id;
-        $order = $this->orders->getOrderById($order_id);
+        // Get the order
+        $order = Order::find($request->order_id);
+        
+        // Show the order details
         return view('orders.tracking', [
-            'order_id' => $order_id,
+            'order_id' => $request->order_id,
             'order' => $order
         ]);
     }

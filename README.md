@@ -20,12 +20,6 @@ Move to root folder of the project ```cd PHP-Test``` and install Laravel:
 composer.phar install
 ```
 
-After, run:
-
-```cmd
-composer.phar require guzzlehttp/guzzle
-```
-
 Rename or copy ```.env.example``` to ```.env``` and add the payments variables at the end of the file.
 
 ```txt
@@ -37,6 +31,19 @@ PAYMENT_SECRET_KEY =
 ---
 
 #### Set up database
+
+If you're using MAMP, you need to update ```DB_PASSWORD``` in your new .env file:
+
+```txt
+DB_PASSWORD = root
+```
+
+Important: make sure you MySQL port is **3306** or change ```DB_PORT``` in the .env file.
+
+Example: 
+```txt
+DB_PORT = 3307
+```
 
 ---
 
@@ -56,13 +63,17 @@ Make sure you're in the root folder of the project and run ```npm install```
 
 #### Ready?
 
-Finally, run ```php artisan serve``` and in another console tab run ```npm run dev```
+Open XAMP o MAMP and start the mysql service, optional start the Apache or Nginx service.
+
+Then, run ```php artisan serve``` and in another console tab run ```npm run dev```
 
 Visit http://localhost:8000
 
 ---
 
 #### Testing
+
+Coming soon
 
 ---
 

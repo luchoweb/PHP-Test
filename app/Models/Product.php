@@ -10,14 +10,18 @@ class Product extends Model
     use HasFactory;
 
     protected $table = "products";
+
     protected $fillable = ['product_name', 'product_price'];
+
     protected $hidden = ['id'];
 
+    // Get all products
     public function getProducts()
     {
         return Product::all();
     }
 
+    // Get a product by ID
     public function getProductById($id)
     {
         return Product::find($id);

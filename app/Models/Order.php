@@ -11,24 +11,24 @@ class Order extends Model
     use HasFactory;
 
     protected $table = "orders";
-    protected $fillable = ['customer_name', 'customer_surname', 'customer_email', 'customer_mobile', 'status', 'product_id', 'payment_status', 'customer_document', 'customer_documentType', 'total', 'payment_requestId'];
+    
+    protected $fillable = ['customer_document', 'customer_documentType', 'customer_name', 'customer_surname', 'customer_email', 'customer_mobile', 'status', 'product_id', 'payment_status', 'total', 'payment_requestId'];
+
     protected $hidden = ['id'];
 
+    // Return all orders
     public function getOrders()
     {
         return Order::all();
     }
 
+    // Return an order by ID
     public function getOrderById($id)
     {
         return Order::find($id);
     }
 
-    /**
-     * Get the product that owns the Order
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
+    // Get the product that owns the Order
     public function product(): HasOne
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
