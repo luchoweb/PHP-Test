@@ -7,7 +7,7 @@
   <ul class="details list-unstyled m-0 p-0">
     <li class="p-3">
       <p class="m-0">
-        <strong>ID de seguimiento</strong>: {{ $order_id }}
+        <strong>Order ID</strong>: {{ $order_id }}
       </p>
     </li>
 

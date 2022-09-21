@@ -15,7 +15,7 @@
 
     <li class="p-3">
       <p class="m-0">
-        @if (!count($response['payment']))
+        @if ($response['payment'] === NULL )
           <strong>Payment status</strong>: <strong>{{ $response['status']['status'] }}</strong>: <small>{{ $response['status']['message'] }}</small>
         @else
           <strong>Payment status</strong>: <strong>{{ $response['payment'][0]['status']['status'] }}</strong>: <small>{{ $response['payment'][0]['status']['message'] }}</small>
@@ -41,7 +41,7 @@
       </p>
     </li>
 
-    @if (count($response['payment']))
+    @if ($response['payment'] !== NULL)
       <li class="p-3">
         <p class="m-0">
           <strong>Payment method</strong>: {{ $response['payment'][0]['paymentMethodName'] }}
