@@ -19,7 +19,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Route available for webservices confirmation
 Route::post(
     '/',
-    [PaymentController::class, 'asyncStatus']
+    [PaymentController::class, 'pendingPayments']
 );

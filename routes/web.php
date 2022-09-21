@@ -36,12 +36,6 @@ Route::get(
     [OrderController::class, 'new']
 );
 
-// Save the order and show all details before to pay
-Route::post(
-    '/orders/checkout',
-    [OrderController::class, 'checkout']
-);
-
 // Tracking an order
 Route::get(
     '/orders/tracking',
@@ -50,23 +44,31 @@ Route::get(
     }
 );
 
+// Webcheckout return confirm route
+Route::get(
+    '/orders/pay/confirm',
+    [PaymentController::class, 'status']
+);
+
+// Webcheckout return cancel route
+Route::get(
+    '/orders/pay/cancel',
+    [PaymentController::class, 'status']
+);
+
 // Show order details
 Route::post(
     '/orders/tracking',
     [TrackingController::class, 'show']
 );
 
-// Response page payments
-Route::get(
-    '/orders/pay/confirm',
-    [PaymentController::class, 'status']
+// Save the order and show all details before to pay
+Route::post(
+    '/orders/checkout',
+    [OrderController::class, 'checkout']
 );
 
-Route::get(
-    '/orders/pay/cancel',
-    [PaymentController::class, 'status']
-);
-
+// Get order info and redirect to webcheckout
 Route::post(
     '/orders/pay',
     [PaymentController::class, 'pay']

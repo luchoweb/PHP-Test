@@ -18,7 +18,7 @@
 
           <div class="col-12 col-md-6 mb-4">
             <label for="document">Document</label>
-            <input type="text" id="document" placeholder="Document" name="customer_document" class="form-control" required>
+            <input type="text" pattern="[1-9]{1,}" id="document" placeholder="Document" name="customer_document" class="form-control" required>
           </div>
           
           <div class="col-12 col-md-6 mb-4">

@@ -69,9 +69,8 @@ class PaymentController extends Controller
         return $response;
     }
 
-    private function checkSession()
+    private function checkSession($request_id)
     {
-        $current_requestId = $_COOKIE['current_payment'];
         $auth = $this->createAuth();
 
         $body = [
@@ -83,99 +82,138 @@ class PaymentController extends Controller
             ]
         ];
 
-        $response = Http::post(env('PAYMENT_BASE_URL').'/api/session/'.$current_requestId, $body)->json();
+        $response = Http::post(env('PAYMENT_BASE_URL').'/api/session/'.$request_id, $body)->json();
 
         return $response;
     }
 
+    // Save requestId in the order and redirect to webcheckout
     public function pay(Request $request)
     {
+        // Create a new session
         $response = $this->createSession($request->all());
+
+        // Set up a view by default
         $view = view('payments.pay', ['response' => $response['status']]);
 
+        // Check if the new session was created
         if ( $response['status']['status'] === 'OK' ) {
-            // add requestId to order
-            $add_requestId = $this->addRequestId($response['requestId'], $request->order_id);
+            // add requestId to order in database
+            $add_request_id = $this->addRequestId($response['requestId'], $request->order_id);
 
             // Validate if requestId field was updated
-            if ( $add_requestId == $response['requestId'] ) {
-                setcookie('current_payment', $add_requestId, strtotime(date('c')) + 600, '/');
+            if ( $add_request_id == $response['requestId'] ) {
+                // Set a cookie to use to verify the session status in the confirm page
+                setcookie('current_payment', $add_request_id, strtotime(date('c')) + 600, '/');
+
+                // Redirect to secure webcheckout
                 return redirect($response['processUrl']);
             }
-
-            return $view;
         }
 
+        // Show the view by default
         return $view;
     }
 
     public function status()
     {
+        // Initial response, show an error message in the view
         $response = [
             'status' => [
                 'status' => 'NO_COOKIE'
             ]
         ];
 
+        // No orders by default
         $order = [];
 
         // Get payment session status
         if ( !empty($_COOKIE['current_payment']) ) {
-            $response = $this->checkSession();
+            // Check session
+            $response = $this->checkSession($_COOKIE['current_payment']);
 
+            // Get status
             $status = $response['status']['status'] === 'PENDING'  ? $response['status']['status'] : $response['payment'][0]['status']['status'];
 
+            // Get payment values
             $payment_fields = [
                 'order_id' => $response['request']['payment']['reference'],
                 'payment_status' => $status
             ];
 
+            // Update the order
             $order = $this->updatePaymentsField($payment_fields);
         }
 
-        print_r(json_encode($response));
+        //print_r(json_encode($response));
 
+        // Show the view
         return view('payments.status', [
             'response' => $response,
             'order' => $order
         ]);
     }
 
-    public function asyncStatus(Request $request)
+    public function pendingPayments(Request $request)
     {
-        $status = $request['status']['status'] === 'PENDING'  ? $request['status']['status'] : $request['payment'][0]['status']['status'];
+        // Checking a valid request
+        if ( $request !== NULL ) {
+            $order_id = $request['reference'];
 
-        $payment_fields = [
-            'order_id' => $request['request']['payment']['reference'],
-            'payment_status' => $status
-        ];
+            // Cheking session status
+            $session = $this->checkSession($order_id);
 
-        $order = $this->updatePaymentsField($payment_fields);
+            $session_status = $session['status']['status'];
+            $session_date = $session['status']['date'];
+            $payment_status = $session_status === 'PENDING'  ? $session_status : $session['payment'][0]['status']['status'];
+
+            $signature = sha1($request['requestID'] . $session_status . $session_date . env('PAYMENT_SECRET_KEY'), true);
+
+            // Get order info
+            $order = Order::find($order_id);
+
+            $is_session_pending = $session_status === 'PENDING';
+            $is_order_pending = $order['payment_status'] === 'PENDING';
+            $is_signature_valid = $signature === $request['signature'];
+
+            // Validate if session and order and pending, and if the signature is valid
+            if ( $is_session_pending && $is_order_pending &&  $is_signature_valid ) {
+                $payment_fields = [
+                    'order_id' => $order_id,
+                    'payment_status' => $payment_status
+                ];
+        
+                $order = $this->updatePaymentsField($payment_fields);
+
+                // We could send a notification by mail here ;)
+            }
+        }
     }
 
     // Update payments field
-    private function updatePaymentsField($response)
+    private function updatePaymentsField($fields)
     {
         $legacy_statuses = [
             'APPROVED' => 'PAYED',
             'REJECTED' => 'REJECTED'
         ];
 
-        $legacy_status = in_array($response['payment_status'], $legacy_statuses) ? $legacy_statuses[$response['payment_status']] : 'CREATED';
+        $legacy_status = in_array($fields['payment_status'], $legacy_statuses) ? $legacy_statuses[$fields['payment_status']] : 'CREATED';
 
-        $order = Order::find($response['order_id']);
-        $order->payment_status = $response['payment_status'];
+        // Update order payments fields
+        $order = Order::find($fields['order_id']);
+        $order->payment_status = $fields['payment_status'];
         $order->status = $legacy_status;
         $order->save();
 
         return $order;
     }
 
-    // Add the requestId
-    private function addRequestId($requestId, $id)
+    // Add the requestId value to the order
+    private function addRequestId($request_id, $id)
     {
         $order = Order::find($id);
-        $order->payment_requestId = $requestId;
+        $order->payment_requestId = $request_id;
         $order->save();
 
         return $order['payment_requestId'];

@@ -81,17 +81,4 @@ class OrderController extends Controller
 
         return $orderSaved;
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        print_r($id);
-        //$order = $this->orders->getOrderById($id);
-        return view('orders.tracking');
-    }
 }

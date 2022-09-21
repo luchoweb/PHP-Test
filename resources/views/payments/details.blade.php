@@ -47,12 +47,6 @@
           <strong>Payment method</strong>: {{ $response['payment'][0]['paymentMethodName'] }}
         </p>
       </li>
-
-      <li class="p-3">
-        <p class="m-0">
-          <strong>Bank</strong>: {{ $response['payment'][0]['issuerName'] }}
-        </p>
-      </li>
     @endif
 
     <li class="p-3">
