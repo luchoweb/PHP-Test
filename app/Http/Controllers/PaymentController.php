@@ -184,11 +184,10 @@ class PaymentController extends Controller
             // Get order id from response
             $order_id = $response['request']['payment']['reference'];
 
-            // Check if response is PENDING
-            $is_session_pending = $response['status']['status'] === 'PENDING';
-
             // Get status
-            $payment_status =  $is_session_pending ? $response['status']['status'] :  $response['payment'][0]['status']['status'];
+            $payment_status = $response['payment'] === NULL ? 
+                $response['status']['status'] : 
+                $response['payment'][0]['status']['status'];
 
             // Get payment values
             $payment_fields = [
